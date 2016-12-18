@@ -45,6 +45,11 @@ export default class {
 		drawCircle(ctx,this.coord.x,this.coord.y,this.radius,this.color);
 	}
 
+	/**
+	 * playTon : Joue la tonnale
+	 * @param  {int} time : durée de la note en ms
+	 * @return {nothing}
+	 */
 	playTon(time){
 		this.oscillator.frequency.value = manager.getFreqByName(this.keynote);
 		soundControler.play(this.oscillator);

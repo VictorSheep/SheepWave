@@ -22,12 +22,22 @@ for (let i = 0; i < 9; i++) {
 	}
 }
 
+/**
+ * getFreqByName : Récupère la fréquence d'une note en fonction de son nom
+ * @param  {string} note : Nom anglais de la note avec sa hauteur  
+ * @return {number}	: fréquence de la note
+ */
 function getFreqByName(note){
 	for (var i = (note[note.length-1]*12); i < (note[note.length-1]*12)+12; i++) {
 		if(notes[i].name == note) return notes[i].freq;
 	}
 }
 
+/**
+ * drawAll 	: Dessine tous les musicCircle sur le canvas
+ * @param  {context} ctx : Context dans lequel dessiner 
+ * @return {nothing}
+ */
 function drawAll(ctx){
 	for (var i = list.length - 1; i >= 0; i--) {
 		list[i].draw(ctx);

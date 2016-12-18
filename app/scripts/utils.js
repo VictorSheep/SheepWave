@@ -12,13 +12,6 @@ function drawRectangle(ctx,x,y,w,h,color){
     ctx.fillRect( x, y, w, h);
 }
 
-function sleep(miliseconds) {
-   var currentTime = new Date().getTime();
-
-   while (currentTime + miliseconds >= new Date().getTime()) {
-   }
-}
-
 function roundAt(nb,i){
 	if (i === 0) return Math.round(nb);
 
@@ -32,4 +25,4 @@ function roundAt(nb,i){
 	return result;
 }
 
-export {drawCircle, drawRectangle, sleep, roundAt};
+export {drawCircle, drawRectangle, roundAt};

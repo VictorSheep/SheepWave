@@ -18,10 +18,14 @@ export default class {
 
 		// Carracteristiques sonores
 		this.variation 	= 'majeur'; 	// mode
-		this.keynote 	= 'C1';			// tonique
-		this.noteName	= ['C1','D1','E1','F1','G1','A1','B1'];
+		this.keynote 	= 'C';			// tonique
+		this.intervals	= [2,2,1,2,2,2];
+		this.noteName	= ['C','D','E','F','G','A','B'];
+		this.notePlayed = null;
+		this.lastNotePlayed = '';
+		this.key 		= 4;
 		this.oscillator = soundControler.ctx.createOscillator();
-		this.oscillator.type = 'square';
+		this.oscillator.type = 'triangle';
 		this.oscillator.frequency.value = 440;
 
 		// on rempli les propriétés, si renseigné
@@ -31,9 +35,31 @@ export default class {
 			}
 		}
 
-		this.playTon(200);		
-	}
+		// Calcul de la gamme utilisé en fonction du mode et de la tonnique
+		// Definition des intervals fonction du mode
+		switch(this.variation){
+			case 'majeur':
+			case 'major':
+				this.intervals = [2,2,1,2,2,2];
+				break;
 
+			case 'mineur':
+			case 'minor':
+				this.intervals = [2,1,2,2,2,2];
+				break;
+		}
+		// Remplissage du tableau noteName[] avec pour première note: la tonnique
+		console.log(this.keynote);
+		let j = manager.getNoteNameIndice(this.keynote);
+		for (var i = 0 ; i < this.intervals.length; i++) {
+			this.noteName[i] = manager.noteName[j%12];
+			j += this.intervals[i];
+		}
+		console.log(this.noteName);
+		this.playTon(200);		
+	}	
+
+	setOscType(val){ this.oscillator.type = val; }
 	setOscFreq(val){ this.oscillator.frequency.value = val; }
 
 	/**
@@ -50,8 +76,30 @@ export default class {
 	 * @param  {int} time : durée de la note en ms
 	 * @return {nothing}
 	 */
-	playTon(time){
-		this.oscillator.frequency.value = manager.getFreqByName(this.keynote);
+	playTon(time,delay=0){
+		this.notePlayed = this.keynote+this.key;
+		this.oscillator.frequency.value = manager.getFreqByName(this.notePlayed);
+		setTimeout(()=>{
+			soundControler.play(this.oscillator);
+			setTimeout(()=>{
+				soundControler.stop(this.oscillator);
+				this.notePlayed = null;
+				this.lastNotePlayed = this.keynote+this.key;
+			},time);
+		},delay);
+	}
+
+	/**
+	 * play : Joue une note
+	 * @param  {int} noteNb 	: numero de la note sur la gamme (de 1 à 7)
+	 * @param  {[type]} time   [description]
+	 * @param  {Number} delay  [description]
+	 * @return {[type]}        [description]
+	 */
+	play(noteNb,time,delay=0){
+		noteNb--;
+		this.notePlayed = this.noteName[noteNb]+this.key;
+		this.oscillator.frequency.value = manager.getFreqByName(this.notePlayed);
 		soundControler.play(this.oscillator);
 		setTimeout(()=>{
 			soundControler.stop(this.oscillator);

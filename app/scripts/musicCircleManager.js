@@ -32,7 +32,11 @@ function getFreqByName(note){
 		if(notes[i].name == note) return notes[i].freq;
 	}
 }
-
+function getNoteNameIndice(note){
+	for (var i = 0; i < noteName.length; i++) {
+		if(noteName[i] == note) return i;
+	}
+}
 /**
  * drawAll 	: Dessine tous les musicCircle sur le canvas
  * @param  {context} ctx : Context dans lequel dessiner 
@@ -46,4 +50,4 @@ function drawAll(ctx){
 function playAll(){
 
 }
-export {list, notes, getFreqByName, drawAll, playAll};
+export {list, noteName, notes, getFreqByName, getNoteNameIndice, drawAll, playAll};

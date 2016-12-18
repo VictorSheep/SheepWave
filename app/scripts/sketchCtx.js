@@ -1,5 +1,5 @@
 import Sketch from 'sketch-js';
-import {drawCircle, drawRectangle, sleep} from './utils';
+import {drawCircle, drawRectangle} from './utils';
 import MusicCircle from './MusicCircle.class';
 import * as musicCircleManager from './musicCircleManager';
 
@@ -14,7 +14,9 @@ export default Sketch.create({
             coord:{
                 x: e.clientX,
                 y: e.clientY
-            }
+            },
+            variation: 'mineur',
+            keynote: 'F#'
         }));
     },
     draw: function() {

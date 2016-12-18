@@ -1,4 +1,7 @@
 import {roundAt} from './utils';
+import SoundControler from './soundControler';
+
+let soundControler = new SoundControler();
 
 let list = [];
 let notes = [];
@@ -11,9 +14,14 @@ for (let i = 0; i < 9; i++) {
 	for (let j = 0; j < noteName.length ; j++) {
 		freq = Math.exp(freq);
 		freq = (noteName[j]=='A' && freq>50)? roundAt(freq,0) : roundAt(freq,2);
+		let oscillator = soundControler.ctx.createOscillator();
+		oscillator.type = 'square';
+		oscillator.frequency.value = freq; // value in hertz
+		oscillator.start();
 		let note = {
 			name: noteName[j]+i,
-			freq: freq
+			freq: freq,
+			osc : oscillator
 		};
 		notes.push(note);
 		freq = Math.log(freq);
@@ -27,6 +35,11 @@ for (let i = 0; i < 9; i++) {
  * @param  {string} note : Nom anglais de la note avec sa hauteur  
  * @return {number}	: fréquence de la note
  */
+function getOscByName(note){
+	for (var i = (note[note.length-1]*12); i < (note[note.length-1]*12)+12; i++) {
+		if(notes[i].name == note) return notes[i].osc;
+	}
+}
 function getFreqByName(note){
 	for (var i = (note[note.length-1]*12); i < (note[note.length-1]*12)+12; i++) {
 		if(notes[i].name == note) return notes[i].freq;
@@ -50,4 +63,14 @@ function drawAll(ctx){
 function playAll(){
 
 }
-export {list, noteName, notes, getFreqByName, getNoteNameIndice, drawAll, playAll};
+export {
+	soundControler,
+	list,
+	noteName,
+	notes,
+	getOscByName,
+	getFreqByName,
+	getNoteNameIndice,
+	drawAll,
+	playAll
+};

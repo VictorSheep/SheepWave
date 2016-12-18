@@ -18,9 +18,8 @@ export default class {
 
 	play(osc){
 		osc.connect(this.ctx.destination);
-		osc.start();
 	}
 	stop(osc){
-		osc.stop();
+		osc.disconnect();
 	}
 }

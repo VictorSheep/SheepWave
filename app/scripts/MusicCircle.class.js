@@ -1,8 +1,5 @@
-import {drawCircle, roundAt} from './utils';
-import SoundControler from './SoundControler.class';
+import {drawCircle, getOscByName, roundAt} from './utils';
 import * as manager from './musicCircleManager';
-
-let soundControler = new SoundControler();
 
 export default class { 
 	constructor(arg){
@@ -20,13 +17,10 @@ export default class {
 		this.variation 	= 'majeur'; 	// mode
 		this.keynote 	= 'C';			// tonique
 		this.intervals	= [2,2,1,2,2,2];
-		this.noteName	= ['C','D','E','F','G','A','B'];
+		this.noteName	= [];
 		this.notePlayed = null;
 		this.lastNotePlayed = '';
-		this.key 		= 4;
-		this.oscillator = soundControler.ctx.createOscillator();
-		this.oscillator.type = 'triangle';
-		this.oscillator.frequency.value = 440;
+		this.key 		= '4';
 
 		// on rempli les propriétés, si renseigné
 		if (typeof arg == 'object') {
@@ -49,14 +43,15 @@ export default class {
 				break;
 		}
 		// Remplissage du tableau noteName[] avec pour première note: la tonnique
-		console.log(this.keynote);
 		let j = manager.getNoteNameIndice(this.keynote);
 		for (var i = 0 ; i < this.intervals.length; i++) {
 			this.noteName[i] = manager.noteName[j%12];
 			j += this.intervals[i];
 		}
-		console.log(this.noteName);
-		this.playTon(200);		
+
+		this.play(1,70);
+		this.play(3,70,110);
+		this.play(5,70,220);
 	}	
 
 	setOscType(val){ this.oscillator.type = val; }
@@ -72,24 +67,6 @@ export default class {
 	}
 
 	/**
-	 * playTon : Joue la tonnale
-	 * @param  {int} time : durée de la note en ms
-	 * @return {nothing}
-	 */
-	playTon(time,delay=0){
-		this.notePlayed = this.keynote+this.key;
-		this.oscillator.frequency.value = manager.getFreqByName(this.notePlayed);
-		setTimeout(()=>{
-			soundControler.play(this.oscillator);
-			setTimeout(()=>{
-				soundControler.stop(this.oscillator);
-				this.notePlayed = null;
-				this.lastNotePlayed = this.keynote+this.key;
-			},time);
-		},delay);
-	}
-
-	/**
 	 * play : Joue une note
 	 * @param  {int} noteNb 	: numero de la note sur la gamme (de 1 à 7)
 	 * @param  {[type]} time   [description]
@@ -98,12 +75,15 @@ export default class {
 	 */
 	play(noteNb,time,delay=0){
 		noteNb--;
-		this.notePlayed = this.noteName[noteNb]+this.key;
-		this.oscillator.frequency.value = manager.getFreqByName(this.notePlayed);
-		soundControler.play(this.oscillator);
 		setTimeout(()=>{
-			soundControler.stop(this.oscillator);
-		},time);
+			this.notePlayed = ''+this.noteName[noteNb]+this.key;
+			let osc = manager.getOscByName(this.notePlayed);
+			manager.soundControler.play(osc);
+			setTimeout(()=>{
+				manager.soundControler.stop(osc);
+				this.lastNotePlayed = this.noteName[noteNb]+this.key;
+			},time);
+		},delay);
 	}
 
 }

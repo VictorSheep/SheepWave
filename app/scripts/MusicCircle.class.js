@@ -1,5 +1,6 @@
 import {drawCircle, getOscByName, roundAt} from './utils';
 import * as manager from './musicCircleManager';
+import soundControler from './soundControler';
 
 export default class { 
 	constructor(arg){

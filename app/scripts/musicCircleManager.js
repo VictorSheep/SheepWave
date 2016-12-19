@@ -1,7 +1,5 @@
 import {roundAt} from './utils';
-import SoundControler from './soundControler';
-
-let soundControler = new SoundControler();
+import * as soundControler from './soundControler';
 
 let list = [];
 let notes = [];

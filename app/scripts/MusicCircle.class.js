@@ -4,7 +4,7 @@ import * as manager from './musicCircleManager';
 export default class { 
 	constructor(arg){
 		// Carracteristiques visuelles
-		this.color 	= '#fff';
+		this.color 	= 'rgba(255,255,255,1)';
 		this.radius = 50;
 		this.coord 	= {
 			x: 0,
@@ -12,6 +12,8 @@ export default class {
 		};
 		this.isHover 	= false;
 		this.alpha 		= 1;
+		// Objets créés par un musicCircle
+		this.ephemeralEntityList = [];
 
 		// Carracteristiques sonores
 		this.variation 	= 'majeur'; 	// mode

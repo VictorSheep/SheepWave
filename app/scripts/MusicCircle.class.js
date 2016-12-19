@@ -1,6 +1,6 @@
 import {drawCircle, getOscByName, roundAt} from './utils';
 import * as manager from './musicCircleManager';
-import soundControler from './soundControler';
+import * as soundControler from './soundControler';
 
 export default class { 
 	constructor(arg){
@@ -81,9 +81,9 @@ export default class {
 		setTimeout(()=>{
 			this.notePlayed = ''+this.noteName[noteNb]+this.key;
 			let osc = manager.getOscByName(this.notePlayed);
-			manager.soundControler.play(osc);
+			soundControler.play(osc);
 			setTimeout(()=>{
-				manager.soundControler.stop(osc);
+				soundControler.stop(osc);
 				this.lastNotePlayed = this.noteName[noteNb]+this.key;
 			},time);
 		},delay);

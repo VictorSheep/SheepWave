@@ -62,7 +62,6 @@ function playAll(){
 
 }
 export {
-	soundControler,
 	list,
 	noteName,
 	notes,

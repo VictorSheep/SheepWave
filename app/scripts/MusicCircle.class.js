@@ -49,7 +49,7 @@ export default class {
 		}
 		// Remplissage du tableau noteName[] avec pour première note: la tonnique
 		let j = manager.getNoteNameIndice(this.keynote);
-		for (var i = 0 ; i < this.intervals.length; i++) {
+		for (var i = 0 ; i <= this.intervals.length; i++) {
 			this.noteName[i] = manager.noteName[j%12];
 			j += this.intervals[i];
 		}

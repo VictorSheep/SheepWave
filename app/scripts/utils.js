@@ -12,6 +12,12 @@ function drawRectangle(ctx,x,y,w,h,color){
     ctx.fillRect( x, y, w, h);
 }
 
+/**
+ * roundAt : arrondi un chiffre après la virgule
+ * @param  {number} nb : chiffre à arrondir
+ * @param  {int} 	i  : nombre de chiffre après la virgule
+ * @return {number} : nombre arrondi
+ */
 function roundAt(nb,i){
 	if (i === 0) return Math.round(nb);
 
@@ -25,4 +31,28 @@ function roundAt(nb,i){
 	return result;
 }
 
-export {drawCircle, drawRectangle, roundAt};
+/**
+ * chance
+ * @param  {int} 	nb : entier de 0 à 100
+ * @return {bool}
+ */
+function chance(nb){
+	if(Math.round(Math.random()*100)<nb){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+/**
+ * takeOffSign : Hote le signe d'un chiffre
+ * @param  {number} nb : Chiffre dont on veut hoter le signe
+ * @return {number} : Chiffre positif
+ */
+function takeOffSign(nb){
+	let result = Math.sqrt(Math.pow(nb,2));
+
+	return result;
+}
+
+export {drawCircle, drawRectangle, roundAt, chance, takeOffSign};

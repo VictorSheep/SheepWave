@@ -10,7 +10,7 @@ export default Sketch.create({
         this.r = this.g = this.b = random( 100, 200 );
     },
     mousedown: function(e) {
-        let vari = (count%2)? 'majeur' : 'mineur';
+
         musicCircleManager.list.push(new MusicCircle({
             color   : '#139AAE',
             radius  : 80,
@@ -18,11 +18,10 @@ export default Sketch.create({
                 x: e.clientX,
                 y: e.clientY
             },
-            variation   : vari,
+            variation   : 'majeur',
             keynote     : 'C',
             key         : '4'
         }));
-        count++;
     },
     draw: function() {
         // couleur de fond

@@ -1,4 +1,4 @@
-import {drawCircle, getOscByName, roundAt} from './utils';
+import {drawCircle, getOscByName, roundAt, takeOffSign} from './utils';
 
 export default class {
 	constructor(arg){
@@ -10,7 +10,9 @@ export default class {
 			x: 0,
 			y: 0
 		};
-		// Objets créés par un musicCircle
+		// Carracteristiques d'animations
+		this.animIndice = 1;
+		// Liste d'instance d'EphemeralWave
 		this.ephemeralEntityList = [];
 
 		// on rempli les propriétés, si renseigné
@@ -19,7 +21,12 @@ export default class {
 				if(this[prop]) this[prop] = arg[prop];
 			}
 		}
-	}	
+	}
+
+	update(){
+		this.radius += 1*this.animIndice;
+		this.addAlpha(-0.03*takeOffSign(this.animIndice/3));
+	}
 
 	/**
 	 * draw = dessine le musicCircle dans un canvas
@@ -28,10 +35,6 @@ export default class {
 	 */
 	draw(ctx){
 		drawCircle(ctx,this.coord.x,this.coord.y,this.radius,this.color);
-		setTimeout(()=>{
-			this.radius += 1*this.animIndice;
-			this.addAlpha(-0.03);
-		},60);
 	}
 
 	addAlpha(val){

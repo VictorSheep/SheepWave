@@ -1,6 +1,7 @@
-import {drawCircle, getOscByName, roundAt} from './utils';
+import {drawCircle, getOscByName, chance, roundAt} from './utils';
 import * as manager from './musicCircleManager';
 import * as soundControler from './soundControler';
+import EphemeralWave from './EphemeralWave.class';
 
 export default class { 
 	constructor(arg){
@@ -14,7 +15,7 @@ export default class {
 		this.isHover 	= false;
 		this.alpha 		= 1;
 		// Objets créés par un musicCircle
-		this.ephemeralEntityList = [];
+		this.ephemeralWaveList = [];
 
 		// Carracteristiques sonores
 		this.variation 	= 'majeur'; 	// mode
@@ -24,6 +25,7 @@ export default class {
 		this.notePlayed = null;
 		this.lastNotePlayed = '';
 		this.key 		= '4';
+		this.beat		= 0;
 
 		// on rempli les propriétés, si renseigné
 		if (typeof arg == 'object') {
@@ -52,10 +54,16 @@ export default class {
 			j += this.intervals[i];
 		}
 
-		this.play(1,70);
-		this.play(3,70,110);
-		this.play(5,70,220);
-	}	
+		this.playRand();
+	}
+
+	update(){
+		for (var i = this.ephemeralWaveList.length - 1; i >= 0; i--) {
+			if(this.ephemeralWaveList[i].opacity <= 0){
+				this.ephemeralWaveList.splice(i,1);
+			}
+		}
+	}
 
 	setOscType(val){ this.oscillator.type = val; }
 	setOscFreq(val){ this.oscillator.frequency.value = val; }
@@ -67,14 +75,25 @@ export default class {
 	 */
 	draw(ctx){
 		drawCircle(ctx,this.coord.x,this.coord.y,this.radius,this.color);
+		this.update();
+	}
+	drawEphemeralWave(ctx){
+		for (var i = this.ephemeralWaveList.length - 1; i >= 0; i--) {
+			this.ephemeralWaveList[i].draw(ctx);
+			this.ephemeralWaveList[i].update();
+		}
+	}
+	drawAll(ctx){
+		this.draw(ctx);
+		this.drawEphemeralWave(ctx);
 	}
 
 	/**
 	 * play : Joue une note
 	 * @param  {int} noteNb 	: numero de la note sur la gamme (de 1 à 7)
-	 * @param  {[type]} time   [description]
-	 * @param  {Number} delay  [description]
-	 * @return {[type]}        [description]
+	 * @param  {int} time   	: durrée de la note
+	 * @param  {int} delay  	: délait avant lecture de la note
+	 * @return {nothing}
 	 */
 	play(noteNb,time,delay=0){
 		noteNb--;
@@ -82,11 +101,31 @@ export default class {
 			this.notePlayed = ''+this.noteName[noteNb]+this.key;
 			let osc = manager.getOscByName(this.notePlayed);
 			soundControler.play(osc);
+			this.ephemeralWaveList.push(new EphemeralWave({
+				coord:this.coord,
+				radius:this.radius,
+				animIndice:2
+			}));
 			setTimeout(()=>{
 				soundControler.stop(osc);
 				this.lastNotePlayed = this.noteName[noteNb]+this.key;
 			},time);
 		},delay);
+	}
+
+	playRand(){
+		let keyRand=1;
+		setInterval(()=>{
+			keyRand = Math.round(Math.random()*6+1);
+			console.log(keyRand);
+			if(this.beat==0){
+				if(chance(90)) this.play(1,100);
+			}else{
+				if(chance(50)) this.play(keyRand,90);
+			}
+			this.beat ++;
+			this.beat = this.beat%4;
+		},150);
 	}
 
 }

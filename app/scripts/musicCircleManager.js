@@ -12,14 +12,22 @@ for (let i = 0; i < 9; i++) {
 	for (let j = 0; j < noteName.length ; j++) {
 		freq = Math.exp(freq);
 		freq = (noteName[j]=='A' && freq>50)? roundAt(freq,0) : roundAt(freq,2);
-		let oscillator = soundControler.ctx.createOscillator();
-		oscillator.type = 'square';
-		oscillator.frequency.value = freq; // value in hertz
-		oscillator.start();
+
+		let squareOsc = soundControler.ctx.createOscillator();
+		squareOsc.type = 'square';
+		squareOsc.frequency.value = freq; // value in hertz
+		squareOsc.start();
+
+		let sineOsc = soundControler.ctx.createOscillator();
+		sineOsc.type = 'square';
+		sineOsc.frequency.value = freq; // value in hertz
+		sineOsc.start();
+
 		let note = {
 			name: noteName[j]+i,
 			freq: freq,
-			osc : oscillator
+			squareOsc 	: squareOsc,
+			sineOsc 	: sineOsc
 		};
 		notes.push(note);
 		freq = Math.log(freq);
@@ -30,12 +38,22 @@ for (let i = 0; i < 9; i++) {
 
 /**
  * getFreqByName : Récupère la fréquence d'une note en fonction de son nom
- * @param  {string} note : Nom anglais de la note avec sa hauteur  
+ * @param  {string} note : Nom anglais de la note avec sa hauteur
+ * @param  {string} type : forme du signal (square,sine)
+ * 
  * @return {number}	: fréquence de la note
  */
-function getOscByName(note){
+function getOscByName(note,type='square'){
 	for (var i = (note[note.length-1]*12); i < (note[note.length-1]*12)+12; i++) {
-		if(notes[i].name == note) return notes[i].osc;
+		
+		if(notes[i].name == note){
+			
+			switch (type){
+				case 'square'	: return notes[i].squareOsc;
+				case 'sine'		: return notes[i].sineOsc;
+				default: break;
+			}
+		}
 	}
 }
 function getFreqByName(note){
@@ -55,7 +73,7 @@ function getNoteNameIndice(note){
  */
 function drawAll(ctx){
 	for (var i = list.length - 1; i >= 0; i--) {
-		list[i].draw(ctx);
+		list[i].drawAll(ctx);
 	}
 }
 function playAll(){

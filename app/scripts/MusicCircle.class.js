@@ -26,6 +26,7 @@ export default class {
 		this.lastNotePlayed = '';
 		this.key 		= '4';
 		this.beat		= 0;
+		this.refKeyControl = [1,2,3,4,5,6,7];
 
 		// on rempli les propriétés, si renseigné
 		if (typeof arg == 'object') {
@@ -53,8 +54,6 @@ export default class {
 			this.noteName[i] = manager.noteName[j%12];
 			j += this.intervals[i];
 		}
-
-		this.playRand();
 	}
 
 	update(){
@@ -111,21 +110,6 @@ export default class {
 				this.lastNotePlayed = this.noteName[noteNb]+this.key;
 			},time);
 		},delay);
-	}
-
-	playRand(){
-		let keyRand=1;
-		setInterval(()=>{
-			keyRand = Math.round(Math.random()*6+1);
-			console.log(keyRand);
-			if(this.beat==0){
-				if(chance(90)) this.play(1,100);
-			}else{
-				if(chance(50)) this.play(keyRand,90);
-			}
-			this.beat ++;
-			this.beat = this.beat%4;
-		},150);
 	}
 
 }

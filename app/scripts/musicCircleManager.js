@@ -1,8 +1,9 @@
-import {roundAt} from './utils';
+import {roundAt, chance} from './utils';
 import * as soundControler from './soundControler';
 
 let list = [];
 let notes = [];
+let beat = 0;
 
 // Remplissage du tableau notes (avec nom hauteur et frequence)
 let noteName = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
@@ -76,8 +77,27 @@ function drawAll(ctx){
 		list[i].drawAll(ctx);
 	}
 }
-function playAll(){
 
+/**
+ * playAllRand : Joue une note random de chaque instance de MusicCircle
+ * @return {nothing}
+ */
+function playAllRand(notesNb=null){
+	setInterval(()=>{
+		for (var i = list.length - 1; i >= 0; i--) {
+			if(!notesNb){notesNb = list[i].refKeyControl;}
+
+			let keyRand = notesNb[Math.floor(Math.random()*notesNb.length)];
+			console.log(keyRand);
+			if(beat===0){
+				if(chance(90)) list[i].play(1,150);
+			}else{
+				if(chance(50)) list[i].play(keyRand,130);
+			}
+		}
+		beat ++;
+		beat = beat%4;
+	}, 200);		
 }
 export {
 	list,
@@ -87,5 +107,5 @@ export {
 	getFreqByName,
 	getNoteNameIndice,
 	drawAll,
-	playAll
+	playAllRand
 };

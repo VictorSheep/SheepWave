@@ -3,7 +3,9 @@ import {drawCircle, drawRectangle} from './utils';
 import MusicCircle from './MusicCircle.class';
 import * as musicCircleManager from './musicCircleManager';
 
-let count=0;
+let count=4;
+let refKeyControl=[1,2,3,4,5,6,7];
+musicCircleManager.playAllRand();
 
 export default Sketch.create({
     setup: function() {
@@ -18,10 +20,14 @@ export default Sketch.create({
                 x: e.clientX,
                 y: e.clientY
             },
-            variation   : 'majeur',
+            variation   : 'mineur',
             keynote     : 'C',
-            key         : '4'
+            key         : count,
+            refKeyControl: refKeyControl
         }));
+
+        count = 3;
+        refKeyControl = [3,5];
     },
     draw: function() {
         // couleur de fond

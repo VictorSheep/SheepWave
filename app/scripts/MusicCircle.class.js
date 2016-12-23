@@ -27,6 +27,12 @@ export default class {
 		this.key 		= '4';
 		this.beat		= 0;
 		this.refKeyControl = [1,2,3,4,5,6,7];
+		this.part = [
+			[],
+			[],
+			[],
+			[]
+		];
 
 		// on rempli les propriétés, si renseigné
 		if (typeof arg == 'object') {
@@ -54,6 +60,8 @@ export default class {
 			this.noteName[i] = manager.noteName[j%12];
 			j += this.intervals[i];
 		}
+
+		this.generatePart();
 	}
 
 	update(){
@@ -95,6 +103,7 @@ export default class {
 	 * @return {nothing}
 	 */
 	play(noteNb,time,delay=0){
+		if (noteNb<=0) return;
 		noteNb--;
 		setTimeout(()=>{
 			this.notePlayed = ''+this.noteName[noteNb]+this.key;
@@ -110,6 +119,29 @@ export default class {
 				this.lastNotePlayed = this.noteName[noteNb]+this.key;
 			},time);
 		},delay);
+	}
+
+	/**
+	 * generatePart : Génère une suite de notes random stocké dans chaque part
+	 * @return {[type]} [description]
+	 */
+	generatePart(){
+		let notesNb = this.refKeyControl;
+		let keyRand = 0;
+
+		for (let i = 0; i < this.part.length ; i++) {
+			for (let beat = 0; beat < 8 ; beat++) {
+
+				this.part[i][beat] = 0;
+				if((beat%4)===0){
+					if(chance(90)) this.part[i][beat] = 1;
+				}else{
+					keyRand = notesNb[Math.floor(Math.random()*notesNb.length)];
+					if(chance(55)) this.part[i][beat] = keyRand;
+				}
+			}
+		}
+
 	}
 
 }

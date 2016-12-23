@@ -5,6 +5,8 @@ let list = [];
 let notes = [];
 let beat = 0;
 
+let played = false;
+
 // Remplissage du tableau notes (avec nom hauteur et frequence)
 let noteName = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
 let freq = Math.log(16.35001); // Do le plus bas
@@ -79,16 +81,16 @@ function drawAll(ctx){
 }
 
 /**
- * playAllRand : Joue une note random de chaque instance de MusicCircle
+ * playAllRand : 	Joue une note random de chaque instance de MusicCircle
+ * 					en boulce, avec la fondamental sur chaque mesure
  * @return {nothing}
  */
 function playAllRand(notesNb=null){
 	setInterval(()=>{
 		for (var i = list.length - 1; i >= 0; i--) {
-			if(!notesNb){notesNb = list[i].refKeyControl;}
+			if(!notesNb) notesNb = list[i].refKeyControl;
 
 			let keyRand = notesNb[Math.floor(Math.random()*notesNb.length)];
-			console.log(keyRand);
 			if(beat===0){
 				if(chance(90)) list[i].play(1,150);
 			}else{
@@ -99,6 +101,49 @@ function playAllRand(notesNb=null){
 		beat = beat%4;
 	}, 200);		
 }
+
+/**
+ * playStruct : 
+ * @param  {Array}  struct [description]
+ * @param  {Number} rep    [description]
+ * @return {[type]}        [description]
+ */
+function playStruct(struct=[1,2],rep=2){
+
+	let j = 0;
+	let nbpart;
+	let beat = 0;
+	let measure = 0;
+
+	setInterval(()=>{
+
+		for (var i = 0; i < list.length; i++) {
+			played = true;
+			// préparation des données
+			j = j % struct.length;
+			nbpart = struct[j]-1;
+			beat = beat % list[i].part[nbpart].length;
+
+			// Lecture de la note
+			list[i].play(list[i].part[nbpart][beat],110);
+
+			// préparation des données pour incrémentation
+		}
+
+		// incrémentation des valeurs
+		if (played){
+			beat ++;
+			if (beat%list[0].part[nbpart].length === 0){
+				measure++;
+				if (measure % rep === 0) j++;
+			}
+		}
+
+
+	},210);
+
+}
+
 export {
 	list,
 	noteName,
@@ -107,5 +152,6 @@ export {
 	getFreqByName,
 	getNoteNameIndice,
 	drawAll,
-	playAllRand
+	playAllRand,
+	playStruct
 };
